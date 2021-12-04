@@ -211,12 +211,92 @@ async function quickSort(l, r){
     }
 }
 
-async function heapify(){
-    
+async function heapify(i, size){
+    let largest = i;
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+    if(left < size){
+        bars[largest].style.backgroundColor = "rgb(31, 29, 29)";
+        bars[left].style.backgroundColor = "rgb(31, 29, 29)";
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        bars[largest].style.backgroundColor = "rgb(64, 153, 255)";
+        bars[left].style.backgroundColor = "rgb(64, 153, 255)";
+        if(parseInt(bars[left].style.height, 10) > parseInt(bars[largest].style.height, 10)){
+            largest = left;
+        }
+    }
+    await new Promise((resolve) =>
+        setTimeout(() => {
+            resolve();
+        }, sortingSpeed)
+    );
+    if(right < size){
+        bars[largest].style.backgroundColor = "rgb(31, 29, 29)";
+        bars[right].style.backgroundColor = "rgb(31, 29, 29)";
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        bars[largest].style.backgroundColor = "rgb(64, 153, 255)";        
+        bars[right].style.backgroundColor = "rgb(64, 153, 255)";   
+        if(parseInt(bars[right].style.height, 10) > parseInt(bars[largest].style.height, 10)){
+            largest = right;
+        }
+    }
+    if(largest !== i){
+        bars[i].style.backgroundColor = "rgb(31, 29, 29)";
+        bars[largest].style.backgroundColor = "rgb(31, 29, 29)";    
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        let temp = bars[i].style.height;
+        bars[i].style.height = bars[largest].style.height;
+        bars[largest].style.height = temp;
+        bars[i].style.backgroundColor = "rgb(64, 153, 255)";
+        bars[largest].style.backgroundColor = "rgb(64, 153, 255)";
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        await heapify(largest, size);
+    }
 }
 
 async function heapSort(){
-    
+    let i;
+    for(i=(Math.floor(currentArraySize/2)-1);i>-1;i--){
+        await heapify(i, currentArraySize);
+    }
+    for(i=currentArraySize-1;i>0;i--){
+        bars[i].style.backgroundColor = "rgb(31, 29, 29)";
+        bars[0].style.backgroundColor = "rgb(31, 29, 29)";    
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        let temp = bars[i].style.height;
+        bars[i].style.height = bars[0].style.height;
+        bars[0].style.height = temp;
+        bars[i].style.backgroundColor = "rgb(64, 153, 255)";
+        bars[0].style.backgroundColor = "rgb(64, 153, 255)";
+        await new Promise((resolve) =>
+            setTimeout(() => {
+                resolve();
+            }, sortingSpeed)
+        );
+        bars[i].style.backgroundColor = "lightgreen";
+        await heapify(0, i);
+    }
+    bars[0].style.backgroundColor = "lightgreen";
 }
 
 rangeSliderSize.addEventListener("input", function(){
